@@ -101,11 +101,12 @@ def menu_principal(screen):
         screen.blit(texto_inicio, rect_texto_inicio)
         pygame.display.update()
 
-# Función para crear un rectángulo en la mitad de la pantalla
-def crearRectangulo(screen):
-    rectangulo = pygame.Rect(ancho // 2 - 50, alto // 2 - 50, 100, 100)
-    pygame.draw.rect(screen, (255, 255, 255), rectangulo)
-    return rectangulo
+# Función para crear un rectángulo en la mitad de la pantalla con textura
+def crearRectangulo():
+    rectangulo_rect = pygame.Rect(ancho // 2 - 35, alto // 2 - -120, 70, 20)
+    textura_rect = pygame.image.load("imagenes/final/wall_1.xcf").convert_alpha()
+    textura_rect = pygame.transform.scale(textura_rect, (70, 20))
+    return rectangulo_rect, textura_rect
 
 # Función principal del juego
 def jugar():
@@ -118,7 +119,7 @@ def jugar():
     mifuentesistema = pygame.font.SysFont("Fredericka the Great", 40)
     mifuentesistema1 = pygame.font.SysFont("Fredericka the Great", 42)
 
-    texto1 = mifuentesistema1.render("YOU SUCK!!", 0, (255, 255, 255))
+    texto1 = mifuentesistema1.render("YOU !!", 0, (255, 255, 255))
     rect_texto = texto1.get_rect()
     rect_texto.center = (ancho // 2, alto // 2)
 
@@ -137,14 +138,13 @@ def jugar():
     espacio_presionado = False
 
     # Crear el rectángulo en el alcance de jugar
-    rectangulo = crearRectangulo(screen)
+    rectangulo_rect, textura_rect = crearRectangulo()
 
     while enJuego:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_LEFT]:
@@ -165,7 +165,6 @@ def jugar():
         else:
             screen.fill((0, 0, 0))
         jugador.dibujar(screen)
-
         proyectiles_a_eliminar = []
         for x in jugador.listaDisparo:
             x.dibujar(screen)
@@ -174,7 +173,7 @@ def jugar():
                 proyectiles_a_eliminar.append(x)
 
             # Agregar detección de colisión con el rectángulo
-            if x.rect.colliderect(rectangulo):
+            if x.rect.colliderect(rectangulo_rect):
                 proyectiles_a_eliminar.append(x)
 
             for enemigo in lista_enemigo:
@@ -196,7 +195,7 @@ def jugar():
                 enJuego = False
                 detenertodo()
                 # Agregar aquí un mensaje de "GAME OVER"
-                mensaje_game_over = mifuentesistema.render("GAME OVER", 0, (255, 0, 0))
+                mensaje_game_over = mifuentesistema.render("YOU ", 0, (255, 0, 0))
                 rect_mensaje_game_over = mensaje_game_over.get_rect()
                 rect_mensaje_game_over.center = (ancho // 2, alto // 2)
                 screen.blit(mensaje_game_over, rect_mensaje_game_over)
@@ -226,6 +225,7 @@ def jugar():
             # Si el enemigo ha explotado, muestra la explosión en su lugar
             if enemigo.explosion:
                 screen.blit(enemigo.imagen_explosion, enemigo.rect)
+                pygame.mixer_music("sonidos/explosion.wav")
                 # Puedes agregar una lógica para eliminar el enemigo después de un tiempo, si lo deseas
 
         # Agregar aquí un mensaje de "YOU WIN" cuando no hay más enemigos
@@ -233,13 +233,13 @@ def jugar():
             mensaje_you_win = mifuentesistema.render("YOU WIN!", 0, (0, 255, 0))
             rect_mensaje_you_win = mensaje_you_win.get_rect()
             rect_mensaje_you_win.center = (ancho // 2, alto // 2)
-            sonidoyouwin = pygame.mixer.Sound("sonidos/yousuck_1.mp3")
+            pygame.mixer.Sound("sonidos/yousuck_1.mp3")
             screen.blit(mensaje_you_win, rect_mensaje_you_win)
             enJuego = False
-        
+
         if not jugador.Vida:
             jugador.destruccion()  # Llama a la función destruccion() para manejar la destrucción de la nave
-            mensaje_you_suck = mifuentesistema.render("YOU SUCK!", 0, (255, 255, 255))
+            mensaje_you_suck = mifuentesistema.render("YOU !", 0, (255, 255, 255))
             rect_mensaje_you_suck = mensaje_you_suck.get_rect()
             rect_mensaje_you_suck.center = (ancho // 2, alto // 2)
             sonidoyousuck = pygame.mixer.Sound("sonidos/yousuck_1.mp3")
@@ -249,6 +249,8 @@ def jugar():
             pygame.time.delay(4000)  # Espera 4 segundos antes de salir del juego
             pygame.quit()
             sys.exit()
+        pygame.draw.rect(screen, (255, 255, 255), rectangulo_rect)  # El rectángulo será de color rojo (255, 0, 0)
+        screen.blit(textura_rect, rectangulo_rect)
 
         pygame.display.update()
         reloj.tick(FPS)
