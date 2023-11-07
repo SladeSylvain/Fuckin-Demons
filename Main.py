@@ -119,7 +119,7 @@ def jugar():
     mifuentesistema = pygame.font.SysFont("Fredericka the Great", 40)
     mifuentesistema1 = pygame.font.SysFont("Fredericka the Great", 42)
 
-    texto1 = mifuentesistema1.render("YOU !!", 0, (255, 255, 255))
+    texto1 = mifuentesistema1.render("YOU SUCK!!", 0, (255, 255, 255))
     rect_texto = texto1.get_rect()
     rect_texto.center = (ancho // 2, alto // 2)
 
@@ -195,7 +195,7 @@ def jugar():
                 enJuego = False
                 detenertodo()
                 # Agregar aquí un mensaje de "GAME OVER"
-                mensaje_game_over = mifuentesistema.render("YOU ", 0, (255, 0, 0))
+                mensaje_game_over = mifuentesistema.render("YOU SUCK", 0, (255, 0, 0))
                 rect_mensaje_game_over = mensaje_game_over.get_rect()
                 rect_mensaje_game_over.center = (ancho // 2, alto // 2)
                 screen.blit(mensaje_game_over, rect_mensaje_game_over)
@@ -230,16 +230,22 @@ def jugar():
 
         # Agregar aquí un mensaje de "YOU WIN" cuando no hay más enemigos
         if not lista_enemigo:
+            pygame.mixer.music.stop()  # Detener la música de fondo
             mensaje_you_win = mifuentesistema.render("YOU WIN!", 0, (0, 255, 0))
             rect_mensaje_you_win = mensaje_you_win.get_rect()
             rect_mensaje_you_win.center = (ancho // 2, alto // 2)
-            pygame.mixer.Sound("sonidos/yousuck_1.mp3")
+            sonido_youwin = pygame.mixer.Sound("sonidos/musica final/Youwin.mp3")  # Cargar el sonido
             screen.blit(mensaje_you_win, rect_mensaje_you_win)
+            sonido_youwin.play()  # Reproducir el sonido de victoria
+            pygame.display.update()  # Actualizar la pantalla para mostrar el mensaje y el sonido
+            pygame.time.delay(3000)  # Esperar 3 segundos
             enJuego = False
+
+
 
         if not jugador.Vida:
             jugador.destruccion()  # Llama a la función destruccion() para manejar la destrucción de la nave
-            mensaje_you_suck = mifuentesistema.render("YOU !", 0, (255, 255, 255))
+            mensaje_you_suck = mifuentesistema.render("YOU SUCK!", 0, (255, 255, 255))
             rect_mensaje_you_suck = mensaje_you_suck.get_rect()
             rect_mensaje_you_suck.center = (ancho // 2, alto // 2)
             sonidoyousuck = pygame.mixer.Sound("sonidos/yousuck_1.mp3")
