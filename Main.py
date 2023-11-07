@@ -257,7 +257,7 @@ def jugar():
             screen.blit(mensaje_you_suck, rect_mensaje_you_suck)
             pygame.display.update()
             sonidoyousuck.play()
-            pygame.time.delay(4000)
+            pygame.time.delay(3000)
             pygame.quit()
             sys.exit()
 
