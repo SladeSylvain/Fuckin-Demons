@@ -1,6 +1,15 @@
 import pygame
 from random import randint
-from Proyectil import Proyectil
+import Proyectil
+import random  # Importa el módulo random
+
+# Lista de rutas de archivo para las imágenes de proyectiles
+imagenes_proyectiles = [
+    "imagenes/final/bala_enemigo1.xcf",
+    "imagenes/final/bala_enemigo2.xcf",
+    "imagenes/final/bala_enemigo3.xcf",
+    "imagenes/final/bala_enemigo4.xcf"
+]
 
 class Invasor(pygame.sprite.Sprite):
     def __init__(self, posx, posy, distancia, imagen1, imagen2):
@@ -12,7 +21,6 @@ class Invasor(pygame.sprite.Sprite):
 
         self.listaimagenes = [self.imagenA, self.imagenB]
         self.posimagen = 0
-
         self.imageninvasor = self.listaimagenes[self.posimagen]
         self.rect = self.imageninvasor.get_rect()
 
@@ -25,7 +33,7 @@ class Invasor(pygame.sprite.Sprite):
         self.tiempocambio = 1
 
         self.conquista = False
-        self.explosion = False  # Variable para rastrear la explosión
+        self.explosion = False
 
         self.derecha = True
         self.contador = 0
@@ -37,11 +45,8 @@ class Invasor(pygame.sprite.Sprite):
         self.limitederecha = posx + distancia
         self.limiteizquierda = posx - distancia
 
-        # Definir una máscara de colisión basada en la imagen del invasor
-        self.mask = pygame.mask.from_surface(self.imageninvasor)
-
     def dibujar(self, superficie):
-        if not self.explosion:  # Solo dibuja la imagen del invasor si no ha explotado
+        if not self.explosion:
             self.imageninvasor = self.listaimagenes[self.posimagen]
             superficie.blit(self.imageninvasor, self.rect)
 
@@ -89,13 +94,18 @@ class Invasor(pygame.sprite.Sprite):
 
     def __disparo(self):
         x, y = self.rect.center
-        miproyectil = Proyectil(self.rect.centerx - 25, y, "imagenes/disparos.xcf", False)
+
+        # Selecciona una ruta aleatoria para la imagen del proyectil
+        ruta_imagen_proyectil = random.choice(imagenes_proyectiles)
+
+        miproyectil = Proyectil.Proyectil(self.rect.centerx - 25, y, ruta_imagen_proyectil, False)
         self.listaDisparo.append(miproyectil)
         self.sonidodisparoenemigo.play()
 
     def destruccion(self):
-        if not self.explosion:  # Evitar repetir la explosión
+        if not self.explosion:
             self.sonidodestruccion.play()
             self.conquista = True
-            self.explosion = True  # Marcar que el invasor ha explotado
-            # Resto del código para la destrucción (si es necesario)
+            self.explosion = True
+
+# Resto de tu código...

@@ -5,13 +5,13 @@ class Nave(pygame.sprite.Sprite):
     def __init__(self, ancho, alto):
         pygame.sprite.Sprite.__init__(self)
         self.ImagenNave = pygame.image.load("imagenes/final/nave principal_1.xcf").convert_alpha()
-        self.ImagenNave = pygame.transform.scale(self.ImagenNave, (70, 70))
+        self.ImagenNave = pygame.transform.scale(self.ImagenNave, (50, 50))
         self.imagenexplosion = pygame.image.load("imagenes/explosion.xcf").convert_alpha()
         self.imagenexplosion = pygame.transform.scale(self.imagenexplosion, (50, 50))
 
         self.rect = self.ImagenNave.get_rect()
-        self.rect.width = 50
-        self.rect.height = 50
+        self.rect.width = 40    
+        self.rect.height = 40
         self.rect.centerx = ancho / 2
         self.rect.centery = alto - 50
 
@@ -50,7 +50,7 @@ class Nave(pygame.sprite.Sprite):
                 miProyectil = Proyectil(x, y, "imagenes/bala1.xcf", True)
 
                 # Limita la cantidad de proyectiles en pantalla (por ejemplo, 5)
-                if len(self.listaDisparo) < 2:
+                if len(self.listaDisparo) < 3:
                     self.listaDisparo.append(miProyectil)
                     self.sonidodisparo.play()
 

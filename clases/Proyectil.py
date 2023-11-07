@@ -1,8 +1,9 @@
 import pygame
-import pygame.mask
+
 class Proyectil(pygame.sprite.Sprite):
     def __init__(self, posx, posy, ruta, personaje):
         pygame.sprite.Sprite.__init__(self)
+        self.imagen = pygame.image.load(ruta)
         self.imagenproyectil = pygame.image.load(ruta).convert_alpha()
         self.rect = self.imagenproyectil.get_rect()
         self.rect.top = posy

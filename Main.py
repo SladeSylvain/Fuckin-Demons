@@ -138,8 +138,9 @@ def jugar():
 
     # Crear el rectángulo en el alcance de jugar
     rectangulo_rect, textura_rect = crearRectangulo()
-    rectangulo_velocidad = 2  # Velocidad de movimiento del rectángulo
+    rectangulo_velocidad = 4  # Velocidad de movimiento del rectángulo
     rectangulo_direccion = -1  # Dirección inicial (izquierda)
+    cambio_direccion_intervalo = randint(0, 120)  # Intervalo aleatorio para cambiar la dirección
 
     while enJuego:
         for event in pygame.event.get():
@@ -152,6 +153,12 @@ def jugar():
             jugador.movimientoIzquierda()
         if keys[pygame.K_RIGHT]:
             jugador.movimientoDerecha()
+
+        # Limitar el movimiento del rectángulo dentro de los límites de la pantalla
+        if rectangulo_rect.left <= 0:
+            rectangulo_direccion = 1
+        elif rectangulo_rect.right >= ancho:
+            rectangulo_direccion = -1
 
         if keys[pygame.K_SPACE] and not espacio_presionado:
             x, y = jugador.rect.center
@@ -254,9 +261,11 @@ def jugar():
         # Actualizar las coordenadas del rectángulo
         rectangulo_rect.move_ip(rectangulo_velocidad * rectangulo_direccion, 0)
         
-        # Comprobar si el rectángulo ha alcanzado los bordes y cambiar la dirección
-        if rectangulo_rect.left <= 0 or rectangulo_rect.right >= ancho:
-            rectangulo_direccion *= -1
+        # Comprobar si es hora de cambiar la dirección del rectángulo (en intervalos aleatorios)
+        cambio_direccion_intervalo -= 1
+        if cambio_direccion_intervalo <= 0:
+            rectangulo_direccion = -rectangulo_direccion
+            cambio_direccion_intervalo = randint(0, 480)  # Establecer un nuevo intervalo aleatorio
 
         pygame.draw.rect(screen, (255, 255, 255), rectangulo_rect)
         screen.blit(textura_rect, rectangulo_rect)
