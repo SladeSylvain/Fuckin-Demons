@@ -39,7 +39,7 @@ class Invasor(pygame.sprite.Sprite):
         self.contador = 0
         self.maxdescenso = self.rect.top + 40
 
-        self.sonidodisparoenemigo = pygame.mixer.Sound("sonidos/disparo_enemigo_2.wav")
+        self.sonidodisparoenemigo = pygame.mixer.Sound("sonidos/disparo_enemigo_1.wav")
         self.sonidodestruccion = pygame.mixer.Sound("sonidos/explosion_nave_enemiga.wav")
 
         self.limitederecha = posx + distancia

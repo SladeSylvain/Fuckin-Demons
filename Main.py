@@ -37,7 +37,7 @@ def cargarEnemigos():
 
     # Aumenta la velocidad de los enemigos en función del nivel actual
     velocidad_enemigo = velocidad_enemigo_por_nivel.get(nivel, 3)  # Por defecto, nivel 3
-    for fila in range(3):
+    for fila in range(4):
         enemigos_a_cada_lado = min(enemigos_a_cada_lado, enemigos_por_fila // 2)
         enemigos_a_la_izquierda = enemigos_a_cada_lado
         enemigos_a_la_derecha = enemigos_a_cada_lado
@@ -102,7 +102,7 @@ def menu_principal(screen):
 
 # Función para crear un rectángulo en la mitad de la pantalla con textura
 def crearRectangulo():
-    rectangulo_rect = pygame.Rect(ancho // 2 - 35, alto // 2 - -120, 70, 20)
+    rectangulo_rect = pygame.Rect(ancho // 2 - 35, alto // 2 - -200, 70, 20)
     textura_rect = pygame.image.load("imagenes/final/wall_1.xcf").convert_alpha()
     textura_rect = pygame.transform.scale(textura_rect, (70, 20))
     return rectangulo_rect, textura_rect

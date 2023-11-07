@@ -6,8 +6,8 @@ class Nave(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.ImagenNave = pygame.image.load("imagenes/final/nave principal_1.xcf").convert_alpha()
         self.ImagenNave = pygame.transform.scale(self.ImagenNave, (50, 50))
-        self.imagenexplosion = pygame.image.load("imagenes/explosion.xcf").convert_alpha()
-        self.imagenexplosion = pygame.transform.scale(self.imagenexplosion, (50, 50))
+        self.imagenexplosion = pygame.image.load("imagenes/final/explosion_1.xcf").convert_alpha()
+        
 
         self.rect = self.ImagenNave.get_rect()
         self.rect.width = 40    
@@ -18,7 +18,7 @@ class Nave(pygame.sprite.Sprite):
         self.listaDisparo = []
         self.Vida = True
         self.velocidad = 10
-        self.sonidodisparo = pygame.mixer.Sound("sonidos/disparo_personaje_3.wav")
+        self.sonidodisparo = pygame.mixer.Sound("sonidos/disparo_personaje_2.wav")
         self.sonidoexplosion = pygame.mixer.Sound("sonidos/explosion_nave_principal.wav")
         self.sonidoyousuck = pygame.mixer.Sound("sonidos/yousuck.mp3")
 
@@ -58,11 +58,12 @@ class Nave(pygame.sprite.Sprite):
                 self.ultimo_disparo = now
 
     def destruccion(self):
+        self.ImagenNave = self.imagenexplosion
+        self.sonidoyousuck.play()
         self.sonidoexplosion.play()
         self.Vida = False
         self.velocidad = 0
-        self.ImagenNave = self.imagenexplosion
-        self.sonidoyousuck.play()
+        
 
     def dibujar(self, superficie):
         superficie.blit(self.ImagenNave, self.rect)
