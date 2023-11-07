@@ -9,7 +9,6 @@ from clases.Proyectil import Proyectil
 # Definición del tamaño de la pantalla
 ancho = 480
 alto = 600
-full = ancho, alto
 
 # Inicialización de variables globales
 nivel = 1
@@ -139,6 +138,8 @@ def jugar():
 
     # Crear el rectángulo en el alcance de jugar
     rectangulo_rect, textura_rect = crearRectangulo()
+    rectangulo_velocidad = 2  # Velocidad de movimiento del rectángulo
+    rectangulo_direccion = -1  # Dirección inicial (izquierda)
 
     while enJuego:
         for event in pygame.event.get():
@@ -166,13 +167,13 @@ def jugar():
             screen.fill((0, 0, 0))
         jugador.dibujar(screen)
         proyectiles_a_eliminar = []
+
         for x in jugador.listaDisparo:
             x.dibujar(screen)
             x.trayectoria()
             if x.rect.top < -10:
                 proyectiles_a_eliminar.append(x)
 
-            # Agregar detección de colisión con el rectángulo
             if x.rect.colliderect(rectangulo_rect):
                 proyectiles_a_eliminar.append(x)
 
@@ -194,7 +195,6 @@ def jugar():
                 jugador.destruccion()
                 enJuego = False
                 detenertodo()
-                # Agregar aquí un mensaje de "GAME OVER"
                 mensaje_game_over = mifuentesistema.render("YOU SUCK", 0, (255, 0, 0))
                 rect_mensaje_game_over = mensaje_game_over.get_rect()
                 rect_mensaje_game_over.center = (ancho // 2, alto // 2)
@@ -222,29 +222,24 @@ def jugar():
                             if disparo in jugador.listaDisparo:
                                 jugador.listaDisparo.remove(disparo)
 
-            # Si el enemigo ha explotado, muestra la explosión en su lugar
             if enemigo.explosion:
                 screen.blit(enemigo.imagen_explosion, enemigo.rect)
-                pygame.mixer_music("sonidos/explosion.wav")
-                # Puedes agregar una lógica para eliminar el enemigo después de un tiempo, si lo deseas
+                pygame.mixer.music("sonidos/explosion.wav")
 
-        # Agregar aquí un mensaje de "YOU WIN" cuando no hay más enemigos
         if not lista_enemigo:
-            pygame.mixer.music.stop()  # Detener la música de fondo
+            pygame.mixer.music.stop()
             mensaje_you_win = mifuentesistema.render("YOU WIN!", 0, (0, 255, 0))
             rect_mensaje_you_win = mensaje_you_win.get_rect()
             rect_mensaje_you_win.center = (ancho // 2, alto // 2)
-            sonido_youwin = pygame.mixer.Sound("sonidos/musica final/Youwin.mp3")  # Cargar el sonido
+            sonido_youwin = pygame.mixer.Sound("sonidos/musica final/Youwin.mp3")
             screen.blit(mensaje_you_win, rect_mensaje_you_win)
-            sonido_youwin.play()  # Reproducir el sonido de victoria
-            pygame.display.update()  # Actualizar la pantalla para mostrar el mensaje y el sonido
-            pygame.time.delay(3000)  # Esperar 3 segundos
+            sonido_youwin.play()
+            pygame.display.update()
+            pygame.time.delay(3000)
             enJuego = False
 
-
-
         if not jugador.Vida:
-            jugador.destruccion()  # Llama a la función destruccion() para manejar la destrucción de la nave
+            jugador.destruccion()
             mensaje_you_suck = mifuentesistema.render("YOU SUCK!", 0, (255, 255, 255))
             rect_mensaje_you_suck = mensaje_you_suck.get_rect()
             rect_mensaje_you_suck.center = (ancho // 2, alto // 2)
@@ -252,16 +247,24 @@ def jugar():
             screen.blit(mensaje_you_suck, rect_mensaje_you_suck)
             pygame.display.update()
             sonidoyousuck.play()
-            pygame.time.delay(4000)  # Espera 4 segundos antes de salir del juego
+            pygame.time.delay(4000)
             pygame.quit()
             sys.exit()
-        pygame.draw.rect(screen, (255, 255, 255), rectangulo_rect)  # El rectángulo será de color rojo (255, 0, 0)
+
+        # Actualizar las coordenadas del rectángulo
+        rectangulo_rect.move_ip(rectangulo_velocidad * rectangulo_direccion, 0)
+        
+        # Comprobar si el rectángulo ha alcanzado los bordes y cambiar la dirección
+        if rectangulo_rect.left <= 0 or rectangulo_rect.right >= ancho:
+            rectangulo_direccion *= -1
+
+        pygame.draw.rect(screen, (255, 255, 255), rectangulo_rect)
         screen.blit(textura_rect, rectangulo_rect)
 
         pygame.display.update()
         reloj.tick(FPS)
     pygame.display.update()
-    pygame.time.wait(3)  # Espera 3 segundos antes de salir del juego
+    pygame.time.wait(3)
     pygame.quit()
 
 if __name__ == "__main__":
