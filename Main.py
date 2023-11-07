@@ -234,10 +234,12 @@ def jugar():
                 pygame.mixer.music("sonidos/explosion.wav")
 
         if not lista_enemigo:
-            pygame.mixer.music.stop()
+            pygame.mixer.music.fadeout(1000)
             mensaje_you_win = mifuentesistema.render("YOU WIN!", 0, (0, 255, 0))
             rect_mensaje_you_win = mensaje_you_win.get_rect()
             rect_mensaje_you_win.center = (ancho // 2, alto // 2)
+            pygame.mixer.music.fadeout(1500)
+
             sonido_youwin = pygame.mixer.Sound("sonidos/musica final/Youwin.mp3")
             screen.blit(mensaje_you_win, rect_mensaje_you_win)
             sonido_youwin.play()
@@ -250,6 +252,7 @@ def jugar():
             mensaje_you_suck = mifuentesistema.render("YOU SUCK!", 0, (255, 255, 255))
             rect_mensaje_you_suck = mensaje_you_suck.get_rect()
             rect_mensaje_you_suck.center = (ancho // 2, alto // 2)
+            pygame.mixer.music.fadeout(500)
             sonidoyousuck = pygame.mixer.Sound("sonidos/yousuck_1.mp3")
             screen.blit(mensaje_you_suck, rect_mensaje_you_suck)
             pygame.display.update()
